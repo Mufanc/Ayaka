@@ -1,14 +1,23 @@
 use std::fs;
 use std::path::Path;
+use anyhow::Context;
 use include_dir::{Dir, include_dir};
 
 use log::{error, info, warn};
 use once_cell::sync::Lazy;
 use regex::Regex;
-use toml::Value;
+use serde::{Deserialize, Serialize};
 use crate::utils::Ayaka;
 
 const WEB_CONTENTS: Dir = include_dir!("$PROJECT_ROOT/../ayaka-app/dist");
+
+#[derive(Serialize, Deserialize)]
+struct Article {
+    uuid: String,
+    article_name: String,
+    date: String,
+    description: String
+}
 
 pub fn entry() -> anyhow::Result<()> {
     static HEADER_PATTERN: Lazy<Regex> = Lazy::new(|| {
@@ -19,6 +28,8 @@ pub fn entry() -> anyhow::Result<()> {
         error!("Ayaka is not initialized here!");
         return Ok(())
     }
+
+    info!("Start processing...");
 
     let articles_dir = Path::new("articles");
     let deploy_dir = Path::new(".deploy");
@@ -31,7 +42,7 @@ pub fn entry() -> anyhow::Result<()> {
     let posts_dir = deploy_dir.join("posts");
     fs::create_dir(&posts_dir)?;
 
-    let mut articles = Value::Array(Vec::new());
+    let mut articles: Vec<Article> = Vec::new();
 
     for entry in articles_dir.read_dir()? {
         let article_root = entry?.path();
@@ -42,36 +53,48 @@ pub fn entry() -> anyhow::Result<()> {
             continue;
         }
 
-        info!("Processing: **{:?}**", article_root.file_name().unwrap());
+        info!("Process: **{:?}**", index);
 
         let content = fs::read_to_string(index)?;
-        let groups = HEADER_PATTERN.captures(&content).expect("Failed to parse front-matter");
+        let groups: Vec<String> = HEADER_PATTERN
+            .captures(&content)
+            .expect("Failed to parse front-matter")
+            .iter()
+            .map(|it| it.unwrap().as_str().to_string())
+            .collect();
 
-        let headers = groups.get(1).unwrap().as_str().parse::<Value>()?;
-        let content = groups.get(2).unwrap().as_str().trim_start();
+        let headers: Article = toml::from_str(&groups[1]).context(here!())?;
+        let content = groups[2].trim_start();
 
-        let deploy_root = posts_dir.join(headers["uuid"].as_str().unwrap());
+        let deploy_root = posts_dir.join(&headers.uuid);
         fs::create_dir(&deploy_root)?;
 
         // write content to index.md
         fs::write(deploy_root.join("index.md"), content)?;
+        fs::write(
+            deploy_root.join("article.json"),
+            serde_json::to_string(&headers).unwrap()
+        )?;
 
         // copy other files to article_root
         for entry in article_root.read_dir()? {
             let entry = entry?.path();
             let name = entry.file_name().unwrap();
+
             if name == "index.md" {
                 continue;
             }
+
             fs::copy(&entry, deploy_root.join(name))?;
-            info!("Copy asset: **{:?}**", entry);
+            info!("Copy: **{:?}**", entry);
         }
 
-        articles.as_array_mut().unwrap().push(headers);
+        articles.push(headers);
     }
 
     fs::write(deploy_dir.join("articles.json"), serde_json::to_string(&articles)?)?;
 
+    info!("Extract web contents...");
     WEB_CONTENTS.extract(deploy_dir)?;
 
     Ok(())

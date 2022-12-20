@@ -62,6 +62,7 @@ dependencies = [
  "log4rs",
  "once_cell",
  "regex",
+ "serde",
  "serde_json",
  "toml",
  "uuid",

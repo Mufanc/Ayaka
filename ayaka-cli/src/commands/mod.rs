@@ -17,6 +17,12 @@ macro_rules! get_binary {
     };
 }
 
+macro_rules! here {
+    () => {
+        concat!("at ", file!(), " line ", line!(), " column ", column!())
+    };
+}
+
 import!(init);
 import!(new);
 import!(gen);
