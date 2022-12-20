@@ -71,9 +71,10 @@ fn main() -> anyhow::Result<()> {
 
     let args = argparse::parse();
     match args.action {
-        Action::Init => commands::init()?,
+        Action::Init => commands::initialize()?,
         Action::New { article_name } => commands::new(&article_name)?,
-        Action::Gen => commands::gen()?,
+        Action::Gen => commands::generate()?,
+        Action::Preview { port } => commands::preview(port)?,
     }
 
     Ok(())

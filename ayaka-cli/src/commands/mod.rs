@@ -23,6 +23,7 @@ macro_rules! here {
     };
 }
 
-import!(init);
+import!(initialize);
 import!(new);
-import!(gen);
+import!(generate);
+import!(preview);

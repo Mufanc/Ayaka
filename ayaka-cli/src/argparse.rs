@@ -14,6 +14,14 @@ pub enum Action {
         about = "Generate web contents from your article(s)"
     )]
     Gen,
+    #[clap(
+        visible_alias = "p",
+        about = "Start a server to preview your articles"
+    )]
+    Preview {
+        #[clap(short, long, default_value = "8080")]
+        port: u16,
+    }
 }
 
 #[derive(Parser, Debug)]
