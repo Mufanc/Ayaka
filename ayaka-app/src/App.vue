@@ -5,6 +5,7 @@
 </template>
 
 <script setup lang="ts">
+// https://github.com/trivago/prettier-plugin-sort-imports/issues/191
 </script>
 
 <style lang="less">

@@ -6,32 +6,30 @@
                 <span><i class="fa-regular fa-calendar"></i> {{ item.date }}</span>
             </div>
             <div>{{ item.description }}</div>
-            <router-link :to="`/posts/${ item.uuid }/`">
+            <router-link :to="`/posts/${item.uuid}/`">
                 <el-link class="mt-4" type="primary">More...</el-link>
             </router-link>
-            <hr>
+            <hr />
         </div>
     </article>
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
-import axios from "axios";
+import axios from 'axios'
+import { reactive } from 'vue'
 
 interface Article {
-    uuid: string,
-    article_name: string,
-    date: string,
+    uuid: string
+    article_name: string
+    date: string
     description: string
 }
 
-const articles = reactive<Article[]>([]);
+const articles = reactive<Article[]>([])
 
-axios.get("/articles.json").then((resp) => {
-    articles.push(...resp.data);
+axios.get('/articles.json').then(resp => {
+    articles.push(...resp.data)
 })
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="less" scoped></style>

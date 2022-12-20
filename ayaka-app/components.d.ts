@@ -6,12 +6,12 @@ import '@vue/runtime-core'
 export {}
 
 declare module '@vue/runtime-core' {
-  export interface GlobalComponents {
-    ElLink: typeof import('element-plus/es')['ElLink']
-    Home: typeof import('./src/components/Home.vue')['default']
-    Markdown: typeof import('./src/components/Markdown.vue')['default']
-    Reader: typeof import('./src/components/Reader.vue')['default']
-    RouterLink: typeof import('vue-router')['RouterLink']
-    RouterView: typeof import('vue-router')['RouterView']
-  }
+    export interface GlobalComponents {
+        ElLink: typeof import('element-plus/es')['ElLink']
+        Home: typeof import('./src/components/Home.vue')['default']
+        Markdown: typeof import('./src/components/Markdown.vue')['default']
+        Reader: typeof import('./src/components/Reader.vue')['default']
+        RouterLink: typeof import('vue-router')['RouterLink']
+        RouterView: typeof import('vue-router')['RouterView']
+    }
 }

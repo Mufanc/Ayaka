@@ -3,12 +3,12 @@
 </template>
 
 <script setup lang="ts">
-import MarkdownIt from 'markdown-it';
+import axios from 'axios'
+import * as cheerio from 'cheerio'
 import highlight from 'highlight.js'
-import * as cheerio from "cheerio";
-import 'highlight.js/styles/intellij-light.css';
-import { ref } from 'vue';
-import axios from "axios";
+import 'highlight.js/styles/intellij-light.css'
+import MarkdownIt from 'markdown-it'
+import { ref } from 'vue'
 
 const { src } = defineProps<{ src: string }>()
 
@@ -17,16 +17,16 @@ const markdown = MarkdownIt({
     highlight(code, lang) {
         if (lang && highlight.getLanguage(lang)) {
             try {
-                return highlight.highlight(code, { language: lang }).value;
+                return highlight.highlight(code, { language: lang }).value
             } catch (err) {
-                console.error(err);
+                console.error(err)
             }
         }
-        return '';
-    }
-});
+        return ''
+    },
+})
 
-const source = ref('');
+const source = ref('')
 
 function replaceSrc(path: string) {
     let $ = cheerio.load(markdown.render(source.value))
@@ -39,8 +39,8 @@ function replaceSrc(path: string) {
     return $.html()
 }
 
-axios.get(src).then((resp) => {
-    source.value = resp.data;
+axios.get(src).then(resp => {
+    source.value = resp.data
 })
 </script>
 
@@ -57,7 +57,7 @@ axios.get(src).then((resp) => {
     :deep(pre) {
         overflow-x: auto;
         color: unset;
-        background-color: #fafafa;  // Todo: extract to configs
+        background-color: #fafafa; // Todo: extract to configs
     }
 
     :deep(code) {

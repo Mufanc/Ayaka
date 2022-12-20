@@ -1,10 +1,10 @@
-import { resolve } from 'path';
-import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
-import WindiCSS from 'vite-plugin-windicss'
+import { resolve } from 'path'
 import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
+import { defineConfig } from 'vite'
+import WindiCSS from 'vite-plugin-windicss'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,15 +12,15 @@ export default defineConfig({
         Vue(),
         WindiCSS(),
         AutoImport({
-            resolvers: [ElementPlusResolver()]
+            resolvers: [ElementPlusResolver()],
         }),
         Components({
-            resolvers: [ElementPlusResolver()]
-        })
+            resolvers: [ElementPlusResolver()],
+        }),
     ],
     resolve: {
         alias: {
-            '@': resolve(__dirname, './src')
-        }
-    }
+            '@': resolve(__dirname, './src'),
+        },
+    },
 })
