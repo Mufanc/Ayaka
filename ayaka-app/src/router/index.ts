@@ -7,14 +7,14 @@ const router = createRouter({
             path: '/',
             name: 'Home',
             component() {
-                return import('@/components/Home.vue')
+                return import('@/components/HomePage.vue')
             },
         },
         {
             path: '/posts/:article',
             name: 'Article',
             component() {
-                return import('@/components/Reader.vue')
+                return import('@/components/ArticlePage.vue')
             },
         },
     ],
