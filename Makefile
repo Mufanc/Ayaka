@@ -1,4 +1,4 @@
-.PHONY : install ayaka-app ayaka-cli
+.PHONY : install ayaka-app ayaka-cli clean
 
 install: ayaka-app ayaka-cli
 
