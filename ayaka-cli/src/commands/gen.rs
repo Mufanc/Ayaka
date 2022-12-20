@@ -7,6 +7,7 @@ use log::{error, info, warn};
 use once_cell::sync::Lazy;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
+use toml::Value;
 use crate::utils::Ayaka;
 
 const WEB_CONTENTS: Dir = include_dir!("$PROJECT_ROOT/../ayaka-app/dist");
@@ -38,6 +39,9 @@ pub fn entry() -> anyhow::Result<()> {
         fs::remove_dir_all(deploy_dir)?;
     }
     fs::create_dir(deploy_dir)?;
+
+    let configs = fs::read_to_string("configs.toml")?.parse::<Value>()?;
+    fs::write(deploy_dir.join("manifest.json"), serde_json::to_string(&configs).unwrap())?;
 
     let posts_dir = deploy_dir.join("posts");
     fs::create_dir(&posts_dir)?;

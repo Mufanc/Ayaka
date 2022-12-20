@@ -7,7 +7,7 @@ use uuid::Uuid;
 
 use crate::utils::Fs;
 
-const CONFIG_TEMPLATE: &str = get_string!("templates/config.toml");
+const CONFIG_TEMPLATE: &str = get_string!("templates/configs.toml");
 
 const SAMPLE_ARTICLE: &str = get_string!("sample/sample.md");
 const AYAYAKA_ICON: &[u8] = get_binary!("sample/150px-Ayayaka.png");
@@ -18,8 +18,8 @@ pub fn entry() -> anyhow::Result<()> {
         return Ok(());
     }
 
-    // default config.toml
-    fs::write("config.toml", CONFIG_TEMPLATE)?;
+    // default configs.toml
+    fs::write("configs.toml", CONFIG_TEMPLATE)?;
     info!("Generated default config.yml");
 
     // sample article

@@ -15,7 +15,7 @@ pub struct Ayaka;
 
 impl Ayaka {
     pub fn is_init() -> bool {
-        if !Path::new("config.toml").exists() {
+        if !Path::new("configs.toml").exists() {
             return false;
         }
         if !Path::new("articles").exists() {
