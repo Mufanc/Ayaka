@@ -7,7 +7,9 @@ specifiers:
   '@types/node': ^18.11.17
   '@vitejs/plugin-vue': ^3.2.0
   '@vue/compiler-sfc': ^3.2.45
+  animate.css: ^4.1.1
   axios: ^1.2.1
+  base-x: ^4.0.0
   cheerio: 1.0.0-rc.12
   element-plus: ^2.2.27
   highlight.js: ^11.7.0
@@ -25,7 +27,9 @@ specifiers:
   windicss: ^3.5.6
 
 dependencies:
+  animate.css: 4.1.1
   axios: 1.2.1
+  base-x: 4.0.0
   cheerio: 1.0.0-rc.12
   element-plus: 2.2.27_vue@3.2.45
   highlight.js: 11.7.0
@@ -659,6 +663,10 @@ packages:
     hasBin: true
     dev: true
 
+  /animate.css/4.1.1:
+    resolution: {integrity: sha512-+mRmCTv6SbCmtYJCN4faJMNFVNN5EuCTTprDTAo7YzIGji2KADmakjVA3+8mVDkZ2Bf09vayB35lSQIex2+QaQ==}
+    dev: false
+
   /ansi-styles/3.2.1:
     resolution: {integrity: sha512-VT0ZI6kZRdTh8YyJw3SMbYm/u+NqfsAxEpWO0Pf9sq8/e94WxxOpPKx9FR1FlyCtOVDNOQ+8ntlqFxiRc+r5qA==}
     engines: {node: '>=4'}
@@ -699,6 +707,10 @@ packages:
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
     dev: true
+
+  /base-x/4.0.0:
+    resolution: {integrity: sha512-FuwxlW4H5kh37X/oW59pwTzzTKRzfrrQwhmyspRM7swOEZcHtDZSCt45U6oKgtuFE+WYPblePMVIPR4RZrh/hw==}
+    dev: false
 
   /binary-extensions/2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}

@@ -1,12 +1,12 @@
 <template>
     <article class="py-1.5rem max-w-screen-md mx-auto prose">
-        <div v-for="item in articles" :key="item.uuid">
+        <div v-for="it in articles" :key="it.uuid">
             <div class="flex justify-between items-baseline">
-                <h1 class="inline-block">{{ item.article_name }}</h1>
-                <span><i class="fa-regular fa-calendar"></i> {{ item.date }}</span>
+                <h1 class="inline-block">{{ it.article_name }}</h1>
+                <span><i class="fa-regular fa-calendar"></i> {{ it.date }}</span>
             </div>
-            <div>{{ item.description }}</div>
-            <router-link :to="`/posts/${item.uuid}/`">
+            <div>{{ it.description }}</div>
+            <router-link :to="`/posts/${it.uuid}/`">
                 <el-link class="mt-4" type="primary">More...</el-link>
             </router-link>
             <hr />
