@@ -1,7 +1,7 @@
 <template>
     <span @click="jump($router, hierarchy.id)">{{ hierarchy.name }}</span>
     <ul v-for="it in hierarchy.children">
-        <li><Toc :hierarchy="it" /></li>
+        <li :class="`toc-layer-${it.layer}`"><Toc :hierarchy="it" /></li>
     </ul>
 </template>
 

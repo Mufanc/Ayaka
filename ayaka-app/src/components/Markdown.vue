@@ -1,5 +1,5 @@
 <template>
-    <div class="markdown" v-html="content"></div>
+    <div ref="container" class="markdown" v-html="content"></div>
 </template>
 
 <script setup lang="ts">
@@ -11,11 +11,11 @@ import * as cheerio from 'cheerio'
 import highlight from 'highlight.js'
 import 'highlight.js/styles/intellij-light.css'
 import MarkdownIt from 'markdown-it'
+import path from 'path'
 import { nextTick, ref, watch } from 'vue'
-import type { RouteLocationNormalizedLoaded } from 'vue-router'
-import { onBeforeRouteUpdate, useRoute } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 
-const { src } = defineProps<{ src: string }>()
+const { index } = defineProps<{ index: string }>()
 
 const markdown = MarkdownIt({
     html: true,
@@ -32,30 +32,43 @@ const markdown = MarkdownIt({
 })
 
 const route = useRoute()
-const source = ref('')
-const content = ref('')
+const router = useRouter()
 
 const emit = defineEmits<{
     (e: 'update-toc', toc: TocTree): void
 }>()
 
-function jumpTo(route: RouteLocationNormalizedLoaded) {
-    const element = document.getElementById(route.query.anchor as string)
+class Anchor {
+    private static noAnimation = false
+    static jumpTo(anchor: string, animate: boolean = true) {
+        const element = document.getElementById(anchor as string)
+        if (!element) return
 
-    if (!element) {
-        return
+        if (!animate) {
+            this.noAnimation = true
+            router.replace({ query: { anchor } })
+            return
+        }
+
+        element.scrollIntoView()
+
+        if (this.noAnimation) {
+            this.noAnimation = false
+        } else {
+            const animator = ['animate__animated', 'animate__flash']
+            element.classList.add(...animator)
+            setTimeout(() => {
+                element.classList.remove(...animator)
+            }, 1000)
+        }
     }
-
-    element.scrollIntoView()
-
-    const animate = ['animate__animated', 'animate__flash']
-    element.classList.add(...animate)
-    setTimeout(() => {
-        element.classList.remove(...animate)
-    }, 1000)
 }
 
-onBeforeRouteUpdate(jumpTo)
+onBeforeRouteUpdate(it => Anchor.jumpTo(it.query.anchor as string))
+
+const container = ref<HTMLElement>()
+const source = ref('')
+const content = ref('')
 
 watch(source, () => {
     const $ = cheerio.load(markdown.render(source.value))
@@ -64,7 +77,7 @@ watch(source, () => {
     $('img').each((ignored, element) => {
         const src = $(element).attr('src')?.replace('\\', '/')
         if (src?.startsWith('./')) {
-            $(element).attr('src', route.path + src.substring(1))
+            $(element).attr('src', path.join(path.dirname(index), src.substring(1)))
         }
     })
 
@@ -100,21 +113,61 @@ watch(source, () => {
         stack.push(node)
 
         $(element).attr('id', node.id)
+        $(element).append('<i class="fa-solid fa-link"></i>')
     })
 
     content.value = $.html()
     emit('update-toc', root)
 
-    nextTick().then(() => jumpTo(route))
+    nextTick(() => {
+        Anchor.jumpTo(route.query.anchor as string)
+
+        if (container.value) {
+            container.value.querySelectorAll(':is(h2, h3, h4)').forEach(element => {
+                element.addEventListener('click', () => {
+                    Anchor.jumpTo(element.id, false)
+                })
+            })
+        }
+    })
 })
 
-axios.get(src).then(resp => {
+axios.get(index).then(resp => {
     source.value = resp.data
 })
 </script>
 
 <style lang="less" scoped>
 .markdown {
+    :deep(:is(h2, h3, h4)) {
+        position: relative;
+        display: flex;
+        align-items: center;
+        @offset: -1.5em;
+
+        > i {
+            position: absolute;
+            transform: scale(0.8);
+            left: @offset;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+            visibility: hidden;
+        }
+
+        &:hover > i {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: @offset;
+            width: 1em;
+            height: 1em;
+        }
+    }
+
     :deep(p) {
         text-indent: 2em;
     }

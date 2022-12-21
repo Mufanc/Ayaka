@@ -3,7 +3,7 @@
         <el-container>
             <el-main>
                 <article class="py-1.5rem max-w-screen-md mx-auto prose">
-                    <Markdown :src="`${$route.path}/index.md`" @update-toc="updateToc" />
+                    <Markdown :index="path.join($route.path, 'index.md')" @update-toc="updateToc" />
                 </article>
             </el-main>
             <el-aside class="fixed right-0 prose">
@@ -17,6 +17,7 @@
 import Markdown from '@/components/Markdown.vue'
 import Toc from '@/components/Toc.vue'
 import { TocTree } from '@/components/TocTree'
+import path from 'path'
 import { ref } from 'vue'
 
 const toc = ref(new TocTree())

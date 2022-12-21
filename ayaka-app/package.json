@@ -17,6 +17,7 @@
         "element-plus": "^2.2.27",
         "highlight.js": "^11.7.0",
         "markdown-it": "^13.0.1",
+        "path-browserify": "^1.0.1",
         "vue": "^3.2.41",
         "vue-router": "^4.1.6"
     },
