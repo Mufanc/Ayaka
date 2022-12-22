@@ -3,10 +3,16 @@
         <el-container>
             <el-main>
                 <article class="py-1.5rem max-w-screen-md mx-auto prose">
-                    <Markdown :index="path.join($route.path, 'index.md')" @update-toc="updateToc" />
+                    <suspense>
+                        <Markdown
+                            :src="path.join($route.path, 'index.md')"
+                            :extensions="[]"
+                            @update-toc="updateToc"
+                        />
+                    </suspense>
                 </article>
             </el-main>
-            <el-aside class="fixed right-0 prose">
+            <el-aside class="fixed right-0">
                 <Toc :hierarchy="toc" />
             </el-aside>
         </el-container>
@@ -14,9 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import Markdown from '@/components/Markdown.vue'
-import Toc from '@/components/Toc.vue'
-import { TocTree } from '@/components/TocTree'
+import { Markdown, Toc, TocTree } from '@/components/Markdown'
 import path from 'path'
 import { ref } from 'vue'
 
