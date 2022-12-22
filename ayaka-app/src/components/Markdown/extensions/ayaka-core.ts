@@ -120,7 +120,9 @@ class Ayaka implements Extension {
         this.anchor!.jumpTo(this.route!)
         container.querySelectorAll(':is(h2, h3, h4)').forEach(element => {
             element.addEventListener('click', () => {
-                this.anchor!.jumpTo(this.router!.resolve({ query: { anchor: element.id } }))
+                this.router!.replace({ query: { anchor: element.id } }).catch((err) => {
+                    console.error(err)
+                })
             })
         })
 
