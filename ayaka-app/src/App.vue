@@ -21,7 +21,7 @@ html {
     background-color: #f3f4f6;
 }
 
-::-webkit-scrollbar-track  {
+::-webkit-scrollbar-track {
     background-color: #f3f4f6;
 }
 

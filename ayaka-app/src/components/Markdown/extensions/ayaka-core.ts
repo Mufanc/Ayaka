@@ -22,10 +22,16 @@ class Anchor {
 
         target.scrollIntoView()
 
-        const animator = ['animate__animated', 'animate__flash']
-        target.classList.add(...animator)
+        // const animator = ['animate__animated', 'animate__flash']
+        // target.classList.add(...animator)
+        // setTimeout(() => {
+        //     target.classList.remove(...animator)
+        // }, 1000)
+        //
+
+        target.classList.add('animate__flash')
         setTimeout(() => {
-            target.classList.remove(...animator)
+            target.classList.remove('animate__flash')
         }, 1000)
     }
     constructor(router: Router) {
@@ -92,8 +98,10 @@ class Ayaka implements Extension {
             stack[stack.length - 1].children.push(node)
             stack.push(node)
 
-            $(element).attr('id', node.id)
-            $(element).append('<i class="fa-solid fa-link"></i>')
+            $(element)
+                .attr('id', node.id)
+                .addClass('animate__animated')
+                .append('<i class="fa-solid fa-link"></i>')
         })
 
         this.tocTree = root
@@ -120,14 +128,18 @@ class Ayaka implements Extension {
         this.anchor!.jumpTo(this.route!)
         container.querySelectorAll(':is(h2, h3, h4)').forEach(element => {
             element.addEventListener('click', () => {
-                this.router!.replace({ query: { anchor: element.id } }).catch((err) => {
+                element.classList.remove('animate__animated')
+                setTimeout(() => {
+                    element.classList.add('animate__animated')
+                }, 1200)
+                this.router!.replace({ query: { anchor: element.id } }).catch(err => {
                     console.error(err)
                 })
             })
         })
 
         container.querySelectorAll('pre').forEach(element => {
-            element.addEventListener('wheel', (event) => {
+            element.addEventListener('wheel', event => {
                 if (element.scrollWidth > element.clientWidth) {
                     event.preventDefault()
                     // noinspection JSSuspiciousNameCombination
