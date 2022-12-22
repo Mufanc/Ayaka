@@ -70,7 +70,7 @@ class Ayaka implements Extension {
         const root = new TocTree()
 
         let stack: TocTree[] = [root]
-        $('body > :is(h2, h3, h4)').each((ignored, element) => {
+        $('body > :is(h2, h3, h4)').each((...[, element]) => {
             const layer = parseInt((element as any).name.substring(1)) - 1
 
             while (stack[stack.length - 1].layer >= layer) {
@@ -97,6 +97,17 @@ class Ayaka implements Extension {
         })
 
         this.tocTree = root
+
+        // better scrollbar
+        const scrollbarStyle = [
+            'scrollbar-thin',
+            'scrollbar-thumb-gray-400',
+            'scrollbar-track-gray-200',
+        ].join(' ')
+
+        $('pre').each((...[, element]) => {
+            $(element).addClass(scrollbarStyle)
+        })
     }
 
     onViewUpdated(container: HTMLElement): void {
@@ -110,6 +121,16 @@ class Ayaka implements Extension {
         container.querySelectorAll(':is(h2, h3, h4)').forEach(element => {
             element.addEventListener('click', () => {
                 this.anchor!.jumpTo(this.router!.resolve({ query: { anchor: element.id } }))
+            })
+        })
+
+        container.querySelectorAll('pre').forEach(element => {
+            element.addEventListener('wheel', (event) => {
+                if (element.scrollWidth > element.clientWidth) {
+                    event.preventDefault()
+                    // noinspection JSSuspiciousNameCombination
+                    element.scrollLeft += event.deltaY
+                }
             })
         })
     }

@@ -1,14 +1,15 @@
 .markdown {
+    @floaty-offset: -1.5em;
+
     :is(h2, h3, h4) {
         position: relative;
         display: flex;
         align-items: center;
-        @offset: -1.5em;
 
         > i {
             position: absolute;
             transform: scale(0.8);
-            left: @offset;
+            left: @floaty-offset;
             opacity: 0;
             transition: all 0.1s ease-in-out;
             visibility: hidden;
@@ -22,7 +23,7 @@
         &::before {
             content: '';
             position: absolute;
-            left: @offset;
+            left: @floaty-offset;
             width: 1em;
             height: 1em;
         }

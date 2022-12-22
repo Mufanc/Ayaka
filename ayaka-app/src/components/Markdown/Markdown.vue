@@ -18,6 +18,8 @@ export interface Props {
     extensions?: string[]
 }
 
+const modules: Extension[] = []
+
 // Todo: polyfill punycode - https://github.com/vuejs/vitepress/pull/1244
 const markdown = MarkdownIt({
     html: true,
@@ -40,7 +42,6 @@ export default {
     },
     async setup({ src, extensions }: Props, { emit: $emit }: any) {
         extensions ??= []
-        const modules: Extension[] = []
 
         onBeforeRouteUpdate(to => {
             modules.forEach(it => it.onBeforeRouteUpdate?.call(it, to))
@@ -85,6 +86,12 @@ export default {
         }
 
         return { content, onUpdate }
+    },
+    mounted() {
+        modules.forEach(it => it.onMounted?.call(it))
+    },
+    unmounted() {
+        modules.forEach(it => it.onUnmounted?.call(it))
     },
 }
 </script>
