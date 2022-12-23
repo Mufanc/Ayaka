@@ -1,5 +1,18 @@
 <template>
-    <div v-if="hierarchy.anchor" @click="jump($router, hierarchy.anchor)">{{ hierarchy.name }}</div>
+    <el-tooltip v-if="hierarchy.anchor" :visible="show" placement="top-start" effect="light">
+        <template #content>
+            <span>{{ hierarchy.name }}</span>
+        </template>
+        <div
+            ref="title"
+            class="toc-title"
+            @mouseenter="mouseover = true"
+            @mouseleave="mouseover = false"
+            @click="jump($router, hierarchy.anchor)"
+        >
+            {{ hierarchy.name }}
+        </div>
+    </el-tooltip>
     <ul v-if="hierarchy.children.length">
         <li
             v-for="it in hierarchy.children"
@@ -14,7 +27,17 @@
 
 <script setup lang="ts">
 import { TocTree } from './TocTree'
+import { computed, ref } from 'vue'
 import type { Router } from 'vue-router'
+
+const title = ref<HTMLElement>()
+const mouseover = ref(false)
+
+const show = computed(() => {
+    const element = title.value
+    if (!element) return false
+    return element.clientWidth < element.scrollWidth && mouseover.value
+})
 
 const { hierarchy } = defineProps<{
     hierarchy: TocTree
@@ -35,6 +58,12 @@ function bindClass(node: TocTree) {
 </script>
 
 <style lang="less" scoped>
+.toc-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .toc-item {
     margin-top: 1em;
 

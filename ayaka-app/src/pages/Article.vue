@@ -1,9 +1,7 @@
 <template>
     <main>
         <el-container>
-            <el-aside width="20%" class="right-0 h-screen fixed flex items-center">
-                <div id="toc-box"></div>
-            </el-aside>
+            <div id="toc-box"></div>
             <el-main>
                 <article class="py-1.5rem max-w-screen-md mx-auto prose">
                     <suspense>
@@ -22,7 +20,12 @@ import path from 'path'
 
 <style lang="less" scoped>
 #toc-box {
-    width: 100%;
+    // Todo: 浮于 article 右侧？
+    position: fixed;
+    width: 20%;
+    right: 4em;
+    top: 50%;
+    transform: translateY(-50%);
     max-height: 40%;
     overflow: auto;
 }

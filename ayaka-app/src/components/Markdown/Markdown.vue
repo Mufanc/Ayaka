@@ -1,7 +1,7 @@
 <template>
     <div :ref="onUpdate" id="markdown" v-html="content"></div>
     <teleport to="#toc-box">
-        <span class="w-full h-full">
+        <span class="w-full">
             <Toc :hierarchy="catalog" />
         </span>
     </teleport>
