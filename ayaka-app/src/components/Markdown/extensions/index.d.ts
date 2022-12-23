@@ -7,7 +7,6 @@ export interface Extension {
     onMounted?: () => void
     onUnmounted?: () => void
     onBeforeRouteUpdate?: (route: RouteLocationNormalized) => void
-    onRegisterEmits?: (register: (event: string) => ((...args: any[]) => void)) => void
     onRendered?: ($: cheerio.Root) => void
     onViewUpdated?: (root: HTMLElement) => void
 }

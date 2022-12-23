@@ -1,7 +1,12 @@
 <template>
-    <div v-if="hierarchy.id" @click="jump($router, hierarchy.id)">{{ hierarchy.name }}</div>
+    <div v-if="hierarchy.anchor" @click="jump($router, hierarchy.anchor)">{{ hierarchy.name }}</div>
     <ul v-if="hierarchy.children.length">
-        <li v-for="it in hierarchy.children" :class="`toc-item toc-layer-${it.layer}`">
+        <li
+            v-for="it in hierarchy.children"
+            :key="it.anchor"
+            class="toc-item"
+            :class="bindClass(it)"
+        >
             <Toc :hierarchy="it" />
         </li>
     </ul>
@@ -20,15 +25,26 @@ function jump(router: Router, anchor: string) {
         query: { anchor },
     })
 }
+
+function bindClass(node: TocTree) {
+    return Object.fromEntries([
+        [`toc-layer-${node.layer}`, true],
+        ['active', node.active],
+    ])
+}
 </script>
 
 <style lang="less" scoped>
 .toc-item {
     margin-top: 1em;
-    font-weight: bold;
 
     > div {
         line-height: 1em;
+    }
+
+    &:is(.active) > div {
+        color: red;
+        font-weight: bold;
     }
 }
 
@@ -36,26 +52,27 @@ function jump(router: Router, anchor: string) {
     content: '';
     float: left;
     background-color: #000;
-    height: 0.2em;
-    border-radius: calc($height / 2);
+    height: 0.25em;
+    border-radius: $height;
+    margin-right: 0.5em;
     margin-top: 0.5em;
     transform: translateY(-50%);
 }
 
 #width(@width) {
     width: @width;
-    margin-right: calc((1em - @width) + 0.5em);
+    margin-right: calc(2em - @width + 0.5em);
 }
 
 .toc-layer-1::before {
-    #width(1em);
+    #width(1.6em);
 }
 
 .toc-layer-2::before {
-    #width(0.8em);
+    #width(1.2em);
 }
 
 .toc-layer-3::before {
-    #width(0.6em);
+    #width(0.8em);
 }
 </style>
