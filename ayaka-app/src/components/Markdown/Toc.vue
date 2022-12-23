@@ -50,9 +50,10 @@ function jump(router: Router, anchor: string) {
 }
 
 function bindClass(node: TocTree) {
+    console.log(node.active)
     return Object.fromEntries([
         [`toc-layer-${node.layer}`, true],
-        ['active', node.active],
+        ['toc-active', node.active],
     ])
 }
 </script>
@@ -71,7 +72,7 @@ function bindClass(node: TocTree) {
         line-height: 1em;
     }
 
-    &:is(.active) > div {
+    &:is(.toc-active) > div {
         color: red;
         font-weight: bold;
     }
