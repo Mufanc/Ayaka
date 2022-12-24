@@ -15,19 +15,24 @@ const props = defineProps<{
 }>()
 
 const height = 7
+const expandHeight = height * 2 + 1
 
 const boxHeight = height * 2 + 'em'
+const boxExpandHeight = expandHeight * 2 + 'em'
+
 const boxTranslateY = computed(() => {
     return `calc(-${props.center * 2}em + ${height - (height & 1)}em)`
+})
+
+const boxExpandTranslateY = computed(() => {
+    return `calc(-${props.center * 2}em + ${expandHeight - (expandHeight & 1)}em)`
 })
 </script>
 
 <style lang="less" scoped>
 .wrap {
     overflow: hidden;
-
-    @height: v-bind(boxHeight);
-    height: @height;
+    height: v-bind(boxHeight);
 
     > :deep(ul) {
         transform: translateY(v-bind(boxTranslateY));
@@ -40,7 +45,10 @@ const boxTranslateY = computed(() => {
     }
 
     &:hover {
-        height: calc(@height * 2);
+        height: v-bind(boxExpandHeight);
+        > :deep(ul) {
+            transform: translateY(v-bind(boxExpandTranslateY));
+        }
     }
 }
 </style>
