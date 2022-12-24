@@ -10,9 +10,7 @@
                 </article>
             </main>
             <div class="aside">
-                <div class="toc-box-wrap">
-                    <div ref="toc" id="toc-box"></div>
-                </div>
+                <div ref="toc" id="toc-container"></div>
             </div>
         </div>
     </main>
@@ -42,17 +40,11 @@ watch(toc, value => {
     align-items: center;
 }
 
-.toc-box-wrap {
+#toc-container {
     top: 0;
     position: fixed;
     height: 100%;
     display: flex;
     align-items: center;
-}
-
-#toc-box {
-    font-size: 1.1em;
-    height: 14em;
-    overflow: auto;
 }
 </style>

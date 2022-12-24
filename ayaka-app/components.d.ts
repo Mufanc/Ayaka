@@ -16,6 +16,8 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Toc: typeof import('./src/components/Markdown/Toc.vue')['default']
+    TocBox: typeof import('./src/components/Markdown/TocBox.vue')['default']
     TocWrap: typeof import('./src/components/Markdown/TocWrap.vue')['default']
+    TocWrapper: typeof import('./src/components/Markdown/TocWrapper.vue')['default']
   }
 }

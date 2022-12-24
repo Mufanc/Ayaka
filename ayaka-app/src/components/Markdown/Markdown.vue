@@ -1,16 +1,14 @@
 <template>
     <div ref="container" id="markdown" v-html="content"></div>
-    <teleport to="#toc-box">
-        <span class="w-full">
-            <Toc :hierarchy="catalog" />
-        </span>
+    <teleport to="#toc-container">
+        <TocWrapper :hierarchy="catalog" :center="center" />
     </teleport>
 </template>
 
 <script setup lang="ts">
 import type { Extension } from './extensions'
-import Toc from '@/components/Markdown/Toc.vue'
-import { TocTree } from '@/components/Markdown/TocTree'
+import TocWrapper from '@/components/Markdown/TocBox.vue'
+import { TocRoot } from '@/components/Markdown/TocTree'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 import highlight from 'highlight.js'
@@ -42,7 +40,8 @@ const markdown = MarkdownIt({
     },
 })
 
-const catalog = reactive(new TocTree())
+const catalog = reactive(new TocRoot())
+const center = ref(0)
 
 const headers = new Set<HTMLElement>()
 const observer = new IntersectionObserver(entries => {
@@ -69,7 +68,7 @@ const observer = new IntersectionObserver(entries => {
             }
         })
 
-    catalog.mark(element.id)
+    center.value = catalog.mark(element.id)
 })
 
 const { src, extensions } = withDefaults(defineProps<Props>(), {
@@ -101,7 +100,7 @@ axios.get(src).then(resp => {
     const $ = cheerio.load(markdown.render(resp.data))
 
     // TOC
-    const root = TocTree.from($)
+    const root = TocRoot.from($)
     Object.assign(catalog, root)
 
     modules.forEach(it => it.onRendered?.call(it, $))

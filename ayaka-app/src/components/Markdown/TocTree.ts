@@ -13,22 +13,20 @@ export class TocTree {
     readonly children: TocTree[] = []
     readonly layer: number = 0
     readonly parent: TocTree | undefined = undefined
-    readonly $root = this
-    readonly $record = new Map<string, TocTree>()
-    constructor(init: { [key: string]: any } = {}) {
+    // readonly $root = this
+    // readonly $record = new Map<string, TocTree>()
+    protected constructor(init: { [key: string]: any } = {}) {
         Object.assign(this, init)
-        this.$root.$record.set(this.anchor, this)
     }
-    mark(anchor: string) {
-        this.$record.forEach(it => (it.active = false))
-        let target = this.$record.get(anchor)
-        while (target) {
-            target.active = true
-            target = target.parent
-        }
+}
+
+export class TocRoot extends TocTree {
+    private readonly record: [string, TocTree][] = []
+    constructor(init: { [key: string]: any } = {}) {
+        super(init)
     }
     static from($: cheerio.Root): TocTree {
-        const root = new TocTree()
+        const root = new TocRoot()
         const stack: TocTree[] = [root]
 
         $('body > :is(h2, h3, h4)').each((...[, element]) => {
@@ -41,16 +39,11 @@ export class TocTree {
             const parent = stack[stack.length - 1]
 
             const name = $(element).text()
-            const anchor = b58encode(name)
+            const anchor = (parent.anchor ? `${parent.anchor}.` : '') + b58encode(name)
 
-            const node = new TocTree({
-                name,
-                layer,
-                parent,
-                anchor: parent.anchor ? `${parent.anchor}.${anchor}` : anchor,
-                $root: stack[0],
-            })
+            const node = new TocTree({ name, layer, parent, anchor })
 
+            root.record.push([anchor, node])
             stack[stack.length - 1].children.push(node)
             stack.push(node)
 
@@ -61,5 +54,17 @@ export class TocTree {
         })
 
         return root
+    }
+
+    mark(id: string): number {
+        let center = 0
+        this.record.forEach(([anchor, node], index) => {
+            node.active = false
+            if (id.startsWith(anchor)) {
+                node.active = true
+                center = index
+            }
+        })
+        return center
     }
 }
