@@ -22,6 +22,7 @@ class Anchor {
                 target?.classList.add('animate__flash')
                 setTimeout(() => {
                     target?.classList.remove('animate__flash')
+                    target?.classList.add('animate__animated')
                 }, 1000)
             }, 100)
         }
@@ -77,9 +78,6 @@ class Ayaka implements Extension {
         container.querySelectorAll(':is(h2, h3, h4)').forEach(element => {
             element.addEventListener('click', () => {
                 element.classList.remove('animate__animated')
-                setTimeout(() => {
-                    element.classList.add('animate__animated')
-                }, 1200)
                 this.router!.replace({ query: { anchor: element.id } }).catch(err => {
                     console.error(err)
                 })
