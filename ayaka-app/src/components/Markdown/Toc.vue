@@ -113,7 +113,7 @@ function bindClass(node: TocTree) {
 #width(@width) {
     &::before {
         width: @width;
-        height: calc(0.25em + (1.6em - @width) / 4);
+        height: calc(0.25em + (1.6em - @width) / 6);
         margin-right: calc(1.5em - @width + 0.5em);
     }
 }
