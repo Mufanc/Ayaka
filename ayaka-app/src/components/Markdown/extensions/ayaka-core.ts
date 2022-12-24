@@ -13,6 +13,7 @@ class Anchor {
 
         target?.scrollIntoView()
 
+        // 滚动到位之后再播放动画
         let timer: number
         function listener() {
             timer && window.clearTimeout(timer)
