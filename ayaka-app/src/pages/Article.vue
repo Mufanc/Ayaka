@@ -46,5 +46,10 @@ watch(toc, value => {
     height: 100%;
     display: flex;
     align-items: center;
+    width: -moz-available;
+    //noinspection CssInvalidPropertyValue
+    width: -webkit-fill-available;
+    //noinspection CssInvalidPropertyValue
+    width: fill-available;
 }
 </style>

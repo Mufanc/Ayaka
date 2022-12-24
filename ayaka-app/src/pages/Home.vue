@@ -2,7 +2,7 @@
     <article class="py-1.5rem max-w-screen-md mx-auto prose">
         <div v-for="it in articles" :key="it.uuid">
             <div class="flex justify-between items-baseline">
-                <h1 class="inline-block">{{ it.article_name }}</h1>
+                <h2 class="inline-block">{{ it.article_name }}</h2>
                 <span><i class="fa-regular fa-calendar"></i> {{ it.date }}</span>
             </div>
             <div>{{ it.description }}</div>

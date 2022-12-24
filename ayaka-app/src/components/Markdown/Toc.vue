@@ -110,23 +110,25 @@ function bindClass(node: TocTree) {
     transform: translateY(-50%);
 }
 
+@max-width: 1.6em;
+
 #width(@width) {
     &::before {
         width: @width;
-        height: calc(0.25em + (1.6em - @width) / 6);
-        margin-right: calc(1.5em - @width + 0.5em);
+        height: calc(0.25em + (@max-width - @width) / 6);
+        margin-right: calc(@max-width - @width + 1em);
     }
 }
 
 .toc-layer-1 {
-    #width(1.6em);
+    #width(@max-width);
 }
 
 .toc-layer-2 {
-    #width(1.3em);
+    #width(@max-width - 0.3em);
 }
 
 .toc-layer-3 {
-    #width(1em);
+    #width(@max-width - 0.6em);
 }
 </style>

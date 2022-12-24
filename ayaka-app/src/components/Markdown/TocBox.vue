@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap">
+    <div class="wrap" ref="wrap">
         <Toc :hierarchy="props.hierarchy" />
     </div>
 </template>
@@ -31,8 +31,10 @@ const boxExpandTranslateY = computed(() => {
 
 <style lang="less" scoped>
 .wrap {
-    overflow: hidden;
+    display: flex;
+    width: calc(100% - 2em);
     height: v-bind(boxHeight);
+    overflow: hidden;
 
     > :deep(ul) {
         transform: translateY(v-bind(boxTranslateY));
