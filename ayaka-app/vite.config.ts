@@ -20,8 +20,12 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@': resolve(__dirname, './src'),
-            path: 'path-browserify',
+            '@': resolve(__dirname, 'src'),
+            path: resolve(__dirname, 'node_modules/rollup-plugin-node-builtins/src/es6/path.js'),
+            punycode: resolve(
+                __dirname,
+                'node_modules/rollup-plugin-node-builtins/src/es6/punycode.js'
+            ),
         },
     },
 })
