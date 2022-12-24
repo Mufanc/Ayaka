@@ -61,7 +61,6 @@ function bindClass(node: TocTree) {
 .toc-title {
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .toc-item {
@@ -71,8 +70,14 @@ function bindClass(node: TocTree) {
         line-height: 1em;
     }
 
+    &::before,
+    > div {
+        opacity: 0.3;
+    }
+
+    &:is(.toc-active)::before,
     &:is(.toc-active) > div {
-        color: red;
+        opacity: 1;
         font-weight: bold;
     }
 }
