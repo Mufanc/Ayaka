@@ -8,13 +8,12 @@ function b58encode(str: string) {
 
 export class TocTree {
     active: boolean = false
+    center: boolean = false
     readonly name: string = ''
     readonly anchor: string = ''
     readonly children: TocTree[] = []
     readonly layer: number = 0
     readonly parent: TocTree | undefined = undefined
-    // readonly $root = this
-    // readonly $record = new Map<string, TocTree>()
     protected constructor(init: { [key: string]: any } = {}) {
         Object.assign(this, init)
     }
@@ -57,14 +56,21 @@ export class TocRoot extends TocTree {
     }
 
     mark(id: string): number {
-        let center = 0
+        let center = -1
+
         this.record.forEach(([anchor, node], index) => {
             node.active = false
+            node.center = false
             if (id.startsWith(anchor)) {
                 node.active = true
                 center = index
             }
         })
+
+        if (center != -1) {
+            this.record[center][1].center = true
+        }
+
         return center
     }
 }

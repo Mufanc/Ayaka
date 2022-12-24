@@ -9,11 +9,12 @@ import Toc from '@/components/Markdown/Toc.vue'
 import { TocTree } from '@/components/Markdown/TocTree'
 import { computed } from 'vue'
 
-const height = 9
 const props = defineProps<{
     center: number
     hierarchy: TocTree
 }>()
+
+const height = 7
 
 const boxHeight = height * 2 + 'em'
 const boxTranslateY = computed(() => {
@@ -23,13 +24,23 @@ const boxTranslateY = computed(() => {
 
 <style lang="less" scoped>
 .wrap {
-    font-size: 1.1em;
-    height: v-bind(boxHeight);
     overflow: hidden;
+
+    @height: v-bind(boxHeight);
+    height: @height;
 
     > :deep(ul) {
         transform: translateY(v-bind(boxTranslateY));
-        transition: all 0.3s ease-in-out;
+    }
+
+    &,
+    :deep(*),
+    :deep(*::before) {
+        transition: all 0.5s ease-in-out;
+    }
+
+    &:hover {
+        height: calc(@height * 2);
     }
 }
 </style>

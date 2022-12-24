@@ -53,6 +53,7 @@ function bindClass(node: TocTree) {
     return Object.fromEntries([
         [`toc-layer-${node.layer}`, true],
         ['toc-active', node.active],
+        ['toc-center', node.center],
     ])
 }
 </script>
@@ -64,7 +65,8 @@ function bindClass(node: TocTree) {
 }
 
 .toc-item {
-    margin-top: 1em;
+    padding-top: 1em;
+    font-weight: bold;
 
     > div {
         line-height: 1em;
@@ -72,41 +74,59 @@ function bindClass(node: TocTree) {
 
     &::before,
     > div {
-        opacity: 0.3;
+        opacity: 0.2;
+        transform-origin: left;
+
+        &:is(#toc-container:hover *) {
+            opacity: 0.3;
+        }
     }
 
     &:is(.toc-active)::before,
     &:is(.toc-active) > div {
-        opacity: 1;
-        font-weight: bold;
+        opacity: 0.7 !important;
+
+        &:is(#toc-container:hover *) {
+            opacity: 1;
+        }
+    }
+
+    &:hover::before,
+    &:hover > div {
+        opacity: 0.7 !important;
+    }
+
+    &:is(.toc-center) > div {
+        transform: scale(1.2);
     }
 }
 
 .toc-item::before {
     content: '';
     float: left;
+    border-radius: 1em;
     background-color: #000;
-    height: 0.25em;
-    border-radius: $height;
-    margin-right: 0.5em;
     margin-top: 0.5em;
     transform: translateY(-50%);
 }
 
 #width(@width) {
-    width: @width;
-    margin-right: calc(2em - @width + 0.5em);
+    &::before {
+        width: @width;
+        height: calc(0.25em + (1.6em - @width) / 4);
+        margin-right: calc(1.5em - @width + 0.5em);
+    }
 }
 
-.toc-layer-1::before {
+.toc-layer-1 {
     #width(1.6em);
 }
 
-.toc-layer-2::before {
-    #width(1.2em);
+.toc-layer-2 {
+    #width(1.3em);
 }
 
-.toc-layer-3::before {
-    #width(0.8em);
+.toc-layer-3 {
+    #width(1em);
 }
 </style>
