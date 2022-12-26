@@ -6,7 +6,7 @@
                 <span><i class="fa-regular fa-calendar"></i> {{ it.date }}</span>
             </div>
             <div>{{ it.description }}</div>
-            <router-link :to="`/posts/${it.uuid}/`">
+            <router-link :to="{ name: 'Article', params: { article: it.uuid } }">
                 <el-link class="mt-4" type="primary">More...</el-link>
             </router-link>
             <hr />

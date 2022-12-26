@@ -19,7 +19,7 @@ import 'highlight.js/styles/intellij-light.css'
 import MarkdownIt from 'markdown-it'
 import path from 'path'
 import { nextTick, onMounted, onUnmounted, reactive, ref } from 'vue'
-import type { RouteLocationNormalized, Router } from 'vue-router'
+import type { LocationQueryValue } from 'vue-router'
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 
 const modules: Extension[] = []
@@ -70,16 +70,42 @@ const observer = new IntersectionObserver(entries => {
     center.value = catalog.mark(element.id)
 })
 
+class Anchor {
+    static jumpTo(anchor: LocationQueryValue | LocationQueryValue[]) {
+        if (typeof anchor !== 'string') {
+            return
+        }
+        const element = document.getElementById(anchor)
+        element?.scrollIntoView()
+
+        // 滚动到位之后再播放动画
+        let timer: number
+        function listener() {
+            timer && window.clearTimeout(timer)
+            timer = window.setTimeout(() => {
+                window.removeEventListener('scroll', listener)
+                element?.classList.add('animate__flash')
+                setTimeout(() => {
+                    element?.classList.remove('animate__flash')
+                    element?.classList.add('animate__animated')
+                }, 1000)
+            }, 100)
+        }
+        window.addEventListener('scroll', listener)
+    }
+}
+
+onBeforeRouteUpdate(to => {
+    Anchor.jumpTo(to.query.anchor)
+    modules.forEach(it => it.onBeforeRouteUpdate?.call(it, to))
+})
+
 const { src } = defineProps<{
     src: string
 }>()
 
-onBeforeRouteUpdate(to => {
-    modules.forEach(it => it.onBeforeRouteUpdate?.call(it, to))
-})
-
-const routes: [Router, RouteLocationNormalized] = [useRouter(), useRoute()]
-const metadata: Article = (await axios.get(path.join(routes[1].path, 'article.json'))).data
+const [router, route] = [useRouter(), useRoute()]
+const metadata: Article = (await axios.get(path.join(route.path, 'article.json'))).data
 
 metadata.plugins ??= []
 
@@ -92,7 +118,7 @@ for (const name of ['ayaka-core', ...metadata.plugins]) {
             // noinspection TypeScriptCheckImport
             await import(`./extensions/${name}.less`)
         }
-        module.onLoad?.call(module, ...routes)
+        module.onLoad?.call(module, router, route)
         modules.push(module)
     } catch (err) {
         console.error(err)
@@ -125,8 +151,13 @@ axios.get(src).then(resp => {
         const root = container.value
         if (!root) return
 
+        Anchor.jumpTo(route.query.anchor)
         root.querySelectorAll(':is(h2, h3, h4)').forEach(element => {
             observer.observe(element)
+            element.addEventListener('click', () => {
+                element.classList.remove('animate__animated')
+                router.replace({ query: { anchor: element.id } })
+            })
         })
 
         modules.forEach(it => it.onViewUpdated?.call(it, root))

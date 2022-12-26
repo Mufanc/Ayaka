@@ -8,7 +8,7 @@
             class="toc-title"
             @mouseenter="mouseover = true"
             @mouseleave="mouseover = false"
-            @click="jump($router, hierarchy.anchor)"
+            @click="jumpTo(hierarchy.anchor)"
         >
             {{ hierarchy.name }}
         </div>
@@ -28,7 +28,6 @@
 <script setup lang="ts">
 import { TocTree } from './TocTree'
 import { computed, ref } from 'vue'
-import type { Router } from 'vue-router'
 
 const title = ref<HTMLElement>()
 const mouseover = ref(false)
@@ -43,10 +42,8 @@ const { hierarchy } = defineProps<{
     hierarchy: TocTree
 }>()
 
-function jump(router: Router, anchor: string) {
-    router.replace({
-        query: { anchor },
-    })
+function jumpTo(anchor: string) {
+    document.getElementById(anchor)?.scrollIntoView()
 }
 
 function bindClass(node: TocTree) {
