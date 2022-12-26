@@ -3,9 +3,9 @@
         <div class="flex">
             <div class="aside"></div>
             <main v-if="ready" class="main">
-                <article class="py-1.5rem max-w-screen-md mx-auto prose">
+                <article class="py-1.5rem max-w-screen-md w-screen-md mx-auto prose">
                     <suspense>
-                        <Markdown :src="path.join($route.path, 'index.md')" :extensions="[]" />
+                        <Markdown :src="path.join($route.path, 'index.md')" />
                     </suspense>
                 </article>
             </main>

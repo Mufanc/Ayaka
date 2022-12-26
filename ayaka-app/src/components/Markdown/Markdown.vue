@@ -6,22 +6,21 @@
 </template>
 
 <script setup lang="ts">
+import { Article } from '.'
 import type { Extension } from './extensions'
 import TocWrapper from '@/components/Markdown/TocBox.vue'
 import { TocRoot } from '@/components/Markdown/TocTree'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
+import { ElMessage } from 'element-plus'
+import 'element-plus/es/components/message/style/css'
 import highlight from 'highlight.js'
 import 'highlight.js/styles/intellij-light.css'
 import MarkdownIt from 'markdown-it'
+import path from 'path'
 import { nextTick, onMounted, onUnmounted, reactive, ref } from 'vue'
 import type { RouteLocationNormalized, Router } from 'vue-router'
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
-
-export interface Props {
-    src: string
-    extensions?: string[]
-}
 
 const modules: Extension[] = []
 
@@ -71,27 +70,42 @@ const observer = new IntersectionObserver(entries => {
     center.value = catalog.mark(element.id)
 })
 
-const { src, extensions } = withDefaults(defineProps<Props>(), {
-    extensions: () => [],
-})
+const { src } = defineProps<{
+    src: string
+}>()
 
 onBeforeRouteUpdate(to => {
     modules.forEach(it => it.onBeforeRouteUpdate?.call(it, to))
 })
 
 const routes: [Router, RouteLocationNormalized] = [useRouter(), useRoute()]
+const metadata: Article = (await axios.get(path.join(routes[1].path, 'article.json'))).data
+
+metadata.plugins ??= []
 
 // https://cn.vitejs.dev/guide/features.html#dynamic-import
-for (const name of ['ayaka-core', ...extensions]) {
-    // noinspection TypeScriptCheckImport
-    const module: Extension = (await import(`./extensions/${name}.ts`)).default
-    if (module.injectStyle) {
+for (const name of ['ayaka-core', ...metadata.plugins]) {
+    try {
         // noinspection TypeScriptCheckImport
-        await import(`./extensions/${name}.less`)
+        const module: Extension = (await import(`./extensions/${name}.ts`)).default
+        if (module.injectStyle) {
+            // noinspection TypeScriptCheckImport
+            await import(`./extensions/${name}.less`)
+        }
+        module.onLoad?.call(module, ...routes)
+        modules.push(module)
+    } catch (err) {
+        console.error(err)
+        nextTick(() => {
+            ElMessage.error(`Error: Failed to load extension "${name}"`)
+        })
     }
-    module.onLoad?.call(module, ...routes)
-    modules.push(module)
 }
+
+modules.forEach(it => {
+    const plugin = it.onLoadMarkdownPlugin?.call(it)
+    plugin && markdown.use(plugin)
+})
 
 const content = ref('')
 const container = ref<HTMLElement>()

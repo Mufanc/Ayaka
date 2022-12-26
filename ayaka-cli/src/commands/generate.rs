@@ -17,7 +17,9 @@ struct Article {
     uuid: String,
     article_name: String,
     date: String,
-    description: String
+    description: String,
+    categories: Option<Vec<String>>,
+    plugins: Option<Vec<String>>
 }
 
 pub fn entry() -> anyhow::Result<()> {

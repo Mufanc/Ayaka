@@ -15,15 +15,9 @@
 </template>
 
 <script setup lang="ts">
+import { Article } from '@/components/Markdown'
 import axios from 'axios'
 import { reactive } from 'vue'
-
-interface Article {
-    uuid: string
-    article_name: string
-    date: string
-    description: string
-}
 
 const articles = reactive<Article[]>([])
 
