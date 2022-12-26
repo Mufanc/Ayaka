@@ -43,7 +43,3 @@ ayaka new <NAME>
 ```bash
 ayaka gen
 ```
-
-## 特性
-
-- [ ] Todo
