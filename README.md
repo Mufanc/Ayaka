@@ -1,13 +1,6 @@
-<!--
-uuid = "{{uuid}}"
-article_name = "Ayaka's Notes"
-date = "{{date}}"
-description = "一个简单演示｜A simple demo for Ayaka"
-%-->
-
 # Ayaka's Notes
 
-<img src="./150px-Ayayaka.png" align="right" alt="Ayayaka"/>
+<img src="images/150px-Ayayaka.png" align="right" alt="Ayayaka"/>
 
 ## 依赖
 
@@ -25,14 +18,14 @@ git clone https://github.com/Mufanc/Ayaka && cd Ayaka
 cargo install --path .
 ```
 
-* 🎉 在空文件夹中初始化 Ayaka 
+* 🎉 在空文件夹中初始化 Ayaka
 
 ```bash
 mkdir my-motes && cd my-notes
 ayaka init
 ```
 
-* 🆕 创建新文章 
+* 🆕 创建新文章
 
 ```bash
 ayaka new <NAME>
