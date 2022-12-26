@@ -5,7 +5,7 @@ import type { RouteLocationNormalized } from 'vue-router'
 
 class Ayaka implements Extension {
     private route?: RouteLocationNormalized
-    injectStyle = true
+    injectStyle = false
     onLoad(...[, route]: [any, RouteLocationNormalized]) {
         this.route = route
     }

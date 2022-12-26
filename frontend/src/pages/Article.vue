@@ -1,6 +1,6 @@
 <template>
     <main>
-        <div class="flex">
+        <div class="flex overflow-hidden">
             <div class="aside"></div>
             <main v-if="ready" class="main">
                 <article class="py-1.5rem max-w-screen-md w-screen-md mx-auto prose">
@@ -31,7 +31,6 @@ watch(toc, value => {
 
 <style lang="less" scoped>
 .main {
-    overflow: hidden;
     margin: 0 2em;
 }
 

@@ -46,10 +46,7 @@ export class TocRoot extends TocTree {
             stack[stack.length - 1].children.push(node)
             stack.push(node)
 
-            $(element)
-                .attr('id', node.anchor)
-                .addClass('animate__animated')
-                .append('<i class="fa-solid fa-link"></i>')
+            $(element).attr('id', node.anchor)
         })
 
         return root

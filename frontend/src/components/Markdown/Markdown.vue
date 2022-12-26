@@ -139,11 +139,15 @@ const container = ref<HTMLElement>()
 axios.get(src).then(resp => {
     const $ = cheerio.load(markdown.render(resp.data))
 
+    $('body > :is(h2, h3, h4)').each((...[, element]) => {
+        $(element).addClass('animate__animated').append('<i class="fa-solid fa-link"></i>')
+    })
+
+    modules.forEach(it => it.onRendered?.call(it, $))
+
     // TOC
     const root = TocRoot.from($)
     Object.assign(catalog, root)
-
-    modules.forEach(it => it.onRendered?.call(it, $))
 
     content.value = $.html()
 
@@ -154,7 +158,9 @@ axios.get(src).then(resp => {
         Anchor.jumpTo(route.query.anchor)
         root.querySelectorAll(':is(h2, h3, h4)').forEach(element => {
             observer.observe(element)
-            element.addEventListener('click', () => {
+
+            const button = element.querySelector('i')
+            button!.addEventListener('click', () => {
                 element.classList.remove('animate__animated')
                 router.replace({ query: { anchor: element.id } })
             })
@@ -176,6 +182,36 @@ onUnmounted(() => {
 
 <style lang="less" scoped>
 #markdown {
+    @floaty-offset: -1.5em;
+
+    :deep(:is(h2, h3, h4)) {
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        > i {
+            position: absolute;
+            transform: scale(0.8);
+            left: @floaty-offset;
+            opacity: 0;
+            transition: all 0.1s ease-in-out;
+            visibility: hidden;
+        }
+
+        &:hover > i {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: @floaty-offset;
+            width: 1em;
+            height: 1em;
+        }
+    }
+
     :deep(p) {
         text-indent: 2em;
     }
