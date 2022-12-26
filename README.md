@@ -49,7 +49,7 @@ ayaka gen
 
 ## 排版建议
 
-下面的部分节选自 [中文文案排版指北](https://github.com/sparanoid/chinese-copywriting-guidelines/blob/master/README.zh-Hans.md)，建议应尽量按照此标准写作以获得最佳的展示效果
+下面的部分节选自 [中文文案排版指北](https://github.com/sparanoid/chinese-copywriting-guidelines/blob/master/README.zh-Hans.md)，建议尽量按照此标准写作以获得最佳的展示效果
 
 ### 空格
 
