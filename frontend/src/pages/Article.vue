@@ -31,6 +31,7 @@ watch(toc, value => {
 
 <style lang="less" scoped>
 .main {
+    overflow: hidden;
     margin: 0 2em;
 }
 
