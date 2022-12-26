@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 use toml::Value;
 use crate::utils::Ayaka;
 
-const WEB_CONTENTS: Dir = include_dir!("$PROJECT_ROOT/../ayaka-app/dist");
+const WEB_CONTENTS: Dir = include_dir!("$PROJECT_ROOT/frontend/dist");
 
 #[derive(Serialize, Deserialize)]
 struct Article {

@@ -149,10 +149,6 @@ onUnmounted(() => {
         text-indent: 2em;
     }
 
-    :deep(ul) {
-        padding: 0;
-    }
-
     :deep(pre) {
         overflow-x: auto;
         color: unset;
