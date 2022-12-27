@@ -24,7 +24,7 @@ struct Article {
 
 pub fn entry() -> anyhow::Result<()> {
     static HEADER_PATTERN: Lazy<Regex> = Lazy::new(|| {
-        Regex::new("^<!--\n((?:.*\n)+?)%-->\n([\\s\\S]+)$").unwrap()
+        Regex::new("^\\+{3}\n((?:.*\n)+?)\\+{3}\n([\\s\\S]+)$").unwrap()
     });
 
     if !Ayaka::is_init() {
